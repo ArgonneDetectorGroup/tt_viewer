@@ -1,0 +1,22 @@
+# Mac OS X
+*.DS_Store
+
+# Python build
+*.pyc
+
+# Temp files
+*~
+.ipynb_checkpoints
+
+#Python packaging
+*.egg-info
+dist
+
+#Images
+*.png
+
+#The giant database I use for testing
+*.db
+
+#The configuration file
+config.py

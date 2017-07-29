@@ -44,15 +44,19 @@ def get_db():
 
 @app.route('/')
 def index():
-    df = pd.read_sql_query("select * from TTData order by wafer, subwafer, pixel", get_db())
-    table_names = df['name'].values.tolist()
+    df = pd.read_sql_query("select * from TTData limit 0", get_db())
 
     df_head = df.columns.tolist()
-    df_data = df.values.tolist()
 
-    return render_template_prefix('index.html',
-                                 df_head = df_head,
-                                 df_data = df_data)
+    return render_template_prefix('index.html', df_head = df_head)
+
+@app.route('/get_json')
+def get_json():
+    df = pd.read_sql_query("select * from TTData order by wafer, subwafer, pixel", get_db())
+
+    return df.to_json(orient='records')
+
+
 
 @app.route('/static_plot', methods=['GET', 'POST'])
 def gen_static_plot():

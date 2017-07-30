@@ -31,6 +31,9 @@ app.debug = app.config['DEBUG']
 #configuration files
 PATH_PREFIX = app.config['PREFIX']
 
+#The data repository is likely somewhere different between servers
+DATA_PREFIX = app.config['DATAPATH_PREFIX']
+
 #Make a wrapper that always passes the path_prefix to the templates
 #so it makes calls a little cleaner
 def render_template_prefix(template, **kwargs):
@@ -72,7 +75,7 @@ def gen_static_plot():
     ax = fig.add_subplot(111)
 
     for name, path in plot_locs:
-        plot_data = np.loadtxt(path, skiprows = 2)
+        plot_data = np.loadtxt(os.path.join(DATA_PREFIX, path), skiprows = 2)
 
         xs = plot_data[:,0]
         ys = plot_data[:,1]
@@ -84,12 +87,10 @@ def gen_static_plot():
 
         ax.plot(xs, ys, label=name+' - '+fname)
 
-    ax.legend(title="sample - filename")
+    leg = ax.legend(loc="upper left", title="sample - filename", bbox_to_anchor=[1.05, 1])
 
     ax.set_xlabel("Temperature (K)")
     ax.set_ylabel("Resistance (Ohms)")
-
-    fig.tight_layout()
 
     fig.canvas.draw()
 
@@ -98,7 +99,7 @@ def gen_static_plot():
     # response=flask.make_response(output.getvalue())
     # response.headers['Content-Type'] = 'image/png'
 
-    fig.savefig(output)
+    fig.savefig(output, bbox_extra_artists=(leg,), bbox_inches='tight')
     output.seek(0)
     return flask.send_file(output, mimetype='image/png')
 

@@ -109,7 +109,7 @@ def show_plot():
     plots_requested = flask.request.form.getlist('tt_plots')
 
     if len(plots_requested) == 0:
-        return render_template_prefix('index.html', table_names = table_names)
+        return index()
     else:
         return render_template_prefix('show_plots.html',
                                 plots_requested=plots_requested)

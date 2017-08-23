@@ -17,6 +17,8 @@ dist
 
 #The giant database I use for testing
 *.db
+/tt_viewer_data/*
+
 
 #The configuration file
 config.py

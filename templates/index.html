@@ -19,7 +19,7 @@
   <body>
     <div class="container">
       <h2>TES Test sample data table</h2>
-      <form role="form" method='POST' action={{path_prefix ~ '/tt_plot'}}>
+      <form role="form" method='POST' action={{url_for('show_plot')}}>
         <table class="table table-striped table-condensed"
          data-toggle = "table"
          data-show-export="true"
@@ -31,7 +31,7 @@
          data-show-columns="true"
          data-click-to-select="true"
          data-maintain-selected="true"
-         data-url={{path_prefix ~ "/get_json"}}
+         data-url={{url_for('get_json')}}
          data-id-field="name"
          data-select-item-name="tt_plots">
           <thead>

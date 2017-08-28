@@ -16,7 +16,7 @@
       <img src="{{ url_for('gen_static_plot', plots_requested=plots_requested) }}" alt="Image Placeholder">
 
       <div>
-        <a href="{{ path_prefix ~ '/' }}"><button class="btn btn-info">Return to table</button></a>
+        <a href="{{url_for('index')}}"><button class="btn btn-info">Return to table</button></a>
       </div>
     </div>
 

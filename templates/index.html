@@ -19,11 +19,13 @@
   <body>
     <div class="container">
       <h2>TES Test sample data table</h2>
+      <p>Select data to compare by clicking anywhere on the row. The click "Make Plots" to compare data. There is another "Make Plots" button at the bottom of the table for convenience.
       <form role="form" method='POST' action={{url_for('show_plot')}}>
+        <button type="submit" class="btn btn-info">Make Plots</button>
         <table class="table table-striped table-condensed"
          data-toggle = "table"
          data-show-export="true"
-         data-pagination="true"
+         data-pagination="false"
          data-page-size="20"
          data-search="true"
          data-sortable="true"

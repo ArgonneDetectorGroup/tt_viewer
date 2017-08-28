@@ -26,18 +26,8 @@ DATABASE = app.config['DATABASE']
 #Set the debug level
 app.debug = app.config['DEBUG']
 
-#Allow a custom path prefix for deploying into a subdirectory
-#while using CGI on a server that won't let you edit the Apache
-#configuration files
-PATH_PREFIX = app.config['PREFIX']
-
 #The data repository is likely somewhere different between servers
 DATA_PREFIX = app.config['DATAPATH_PREFIX']
-
-#Make a wrapper that always passes the path_prefix to the templates
-#so it makes calls a little cleaner
-def render_template_prefix(template, **kwargs):
-    return flask.render_template(template, path_prefix=PATH_PREFIX, **kwargs)
 
 def get_db():
     db = getattr(flask.g, '_database', None)
@@ -51,7 +41,7 @@ def index():
 
     df_head = df.columns.tolist()
 
-    return render_template_prefix('index.html', df_head = df_head)
+    return flask.render_template('index.html', df_head = df_head)
 
 @app.route('/get_json')
 def get_json():
@@ -112,7 +102,7 @@ def show_plot():
     if len(plots_requested) == 0:
         return index()
     else:
-        return render_template_prefix('show_plots.html',
+        return flask.render_template('show_plots.html',
                                 plots_requested=plots_requested)
 
 

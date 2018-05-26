@@ -19,9 +19,10 @@
   <body>
     <div class="container">
       <h2>TES Test sample data table</h2>
-      <p>Select data to compare by clicking anywhere on the row. The click "Make Plots" to compare data. There is another "Make Plots" button at the bottom of the table for convenience.
-      <form role="form" method='POST' action={{url_for('show_plot')}}>
-        <button type="submit" class="btn btn-info">Make Plots</button>
+      <p>Select data to compare by clicking anywhere on the row. The click "Make Plots" to compare data. There is another "Make Plots" button at the bottom of the table for convenience. Alternately, you can download the checked data as a zipfile with tab-separated txt data.'
+      <form role="form" method='POST'>
+        <button type="submit" class="btn btn-info" formaction={{url_for('show_plot')}}>Make Plots</button>
+        <button type="submit" class="btn btn-info" formaction={{url_for('download_file')}}>Download Data</button>
         <table class="table table-striped table-condensed"
          id="table"
          data-toggle = "table"
@@ -47,6 +48,7 @@
           </thead>
         </table>
         <button type="submit" class="btn btn-info">Make Plots</button>
+        <button type="submit" class="btn btn-info">Download Data</button>
     </form>
     </div>
 

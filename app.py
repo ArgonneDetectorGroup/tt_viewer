@@ -5,6 +5,7 @@ print(sys.executable)
 import os
 import sqlite3
 import flask
+import zipfile
 import numpy as np
 import pandas as pd
 
@@ -53,12 +54,31 @@ def get_json():
 
     return df.to_json(orient='records')
 
+@app.route('/download_file', methods=['GET', 'POST'])
+def download_file():
+    files_requested = flask.request.form.getlist('tt_plots')
 
+    if len(files_requested) == 0:
+        return index()
+    else:
+            
+        fileTable = pd.read_sql_query("select * from DataFiles", get_db())
+
+        file_locs = fileTable[fileTable['Name'].isin(files_requested)][['Name','Path']].values.tolist()
+
+        memory_file = BytesIO()
+
+        with zipfile.ZipFile(memory_file, 'w') as zf:
+            for name, path in file_locs:
+                zf.write(os.path.join(DATA_PREFIX, path), os.path.basename(path)+'_'+name.replace(':','-')+'.txt', zipfile.ZIP_DEFLATED)
+
+        memory_file.seek(0)
+
+        return flask.send_file(memory_file, attachment_filename='requested_data.zip', as_attachment=True)
 
 @app.route('/static_plot', methods=['GET', 'POST'])
 def gen_static_plot():
     plots_requested = flask.request.args.getlist('plots_requested')
-
     fileTable = pd.read_sql_query("select * from DataFiles", get_db())
 
     plot_locs = fileTable[fileTable['Name'].isin(plots_requested)][['Name','Path']].values.tolist()

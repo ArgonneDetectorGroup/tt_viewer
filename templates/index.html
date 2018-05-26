@@ -23,25 +23,27 @@
       <form role="form" method='POST' action={{url_for('show_plot')}}>
         <button type="submit" class="btn btn-info">Make Plots</button>
         <table class="table table-striped table-condensed"
+         id="table"
          data-toggle = "table"
          data-show-export="true"
          data-pagination="false"
-         data-page-size="20"
          data-search="true"
+         data-advanced-search="true"
          data-sortable="true"
-         data-show-refresh="true"
          data-show-columns="true"
          data-click-to-select="true"
-         data-maintain-selected="true"
          data-url={{url_for('get_json')}}
          data-id-field="name"
-         data-select-item-name="tt_plots">
+         data-select-item-name="tt_plots"
+         data-id-table="advancedTable">
           <thead>
+           <tr>
             <th data-field="state" data-checkbox="true"></th>
             {% for ix in [3, 4, 5, 6, 7, 8, 11, 12, 13, 14, 15, 16, 1, 2] %}
               {% set col_name = df_head[ix] %}
               <th data-field="{{col_name}}" data-sortable="true">{{col_name}}</th>
             {% endfor %}
+           </tr>
           </thead>
         </table>
         <button type="submit" class="btn btn-info">Make Plots</button>
@@ -59,5 +61,6 @@
 
     <!-- Latest compiled and minified Locales -->
     <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/locale/bootstrap-table-en-US.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/extensions/toolbar/bootstrap-table-toolbar.js"></script>
   </body>
 </html>

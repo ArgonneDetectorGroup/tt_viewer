@@ -1,14 +1,18 @@
 from __future__ import division
+import sys
+print(sys.executable)
 
 import os
 import sqlite3
 import flask
 import numpy as np
 import pandas as pd
-import plotly as ply
-from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
-import matplotlib.figure
-from matplotlib.figure import Figure
+
+#Set backend to one that doesn't require DISPLAY to be set
+import matplotlib as mpl
+mpl.use('Agg')
+import matplotlib.pyplot as plt
+
 from io import BytesIO
 
 app = flask.Flask(__name__)
@@ -59,10 +63,7 @@ def gen_static_plot():
 
     plot_locs = fileTable[fileTable['Name'].isin(plots_requested)][['Name','Path']].values.tolist()
 
-    fig = Figure(figsize=(7,5))
-    canvas = FigureCanvas(fig)
-
-    ax = fig.add_subplot(111)
+    fig, ax = plt.subplots(1,1, figsize=(7,5))
 
     for name, path in plot_locs:
         plot_data = np.loadtxt(os.path.join(DATA_PREFIX, path), skiprows = 2)
@@ -82,18 +83,12 @@ def gen_static_plot():
     ax.set_xlabel("Temperature (K)")
     ax.set_ylabel("Resistance (Ohms)")
 
-    fig.canvas.draw()
+    output_stream = BytesIO()
 
-    output = BytesIO()
-    # canvas.print_png(output)
-    # response=flask.make_response(output.getvalue())
-    # response.headers['Content-Type'] = 'image/png'
+    fig.savefig(output_stream, bbox_extra_artists=(leg,), bbox_inches='tight')
 
-    fig.savefig(output, bbox_extra_artists=(leg,), bbox_inches='tight')
-    output.seek(0)
-    return flask.send_file(output, mimetype='image/png')
-
-    return response
+    output_stream.seek(0)
+    return flask.send_file(output_stream, mimetype='image/png')
 
 @app.route('/tt_plot', methods=['GET', 'POST'])
 def show_plot():
